@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin("http://localhost:5173")
 public class UserController {
 
     private final Logger logger =
