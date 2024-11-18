@@ -3,6 +3,7 @@ package users_app.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import users_app.models.request.UserRequest;
 import users_app.models.entities.User;
 import users_app.repositories.UserRepository;
 
@@ -31,6 +32,21 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> update(UserRequest userRequest, Long id) {
+        Optional<User> existingUser = userRepository.findById(id);
+        User optionalUser = null;
+        if (existingUser.isPresent()) {
+            User userDB = existingUser.get();
+            userDB.setUsername(userRequest.getUsername());
+            userDB.setEmail(userRequest.getEmail());
+
+            optionalUser = this.save(userDB);
+        }
+        return Optional.ofNullable(optionalUser);
     }
 
     @Override
